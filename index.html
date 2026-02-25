@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Affiliate Sign Up</title>
+  <style>
+    :root {
+      --bg: #042210;
+      --panel: #111827;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #3b82f6;
+      --error: #ef4444;
+      --ok: #10b981;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 10% -10%, rgba(59, 130, 246, 0.15), transparent),
+        radial-gradient(1200px 600px at 110% -10%, rgba(16, 185, 129, 0.12), transparent),
+        var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 48px auto;
+      padding: 0 16px;
+    }
+
+    header {
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 0 0 8px;
+    }
+
+    p.lead {
+      color: var(--muted);
+      margin: 0 0 24px;
+    }
+
+    form {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+      padding: 24px;
+      backdrop-filter: blur(8px);
+    }
+
+    fieldset {
+      border: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+
+    .col-6 {
+      grid-column: span 6;
+    }
+
+    .col-12 {
+      grid-column: span 12;
+    }
+
+    label {
+      display: inline-block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .req {
+      color: var(--error);
+      margin-left: 4px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(10, 15, 25, 0.55);
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s, background .2s;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #6b7280;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(59, 130, 246, 0.7);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+      background: rgba(10, 15, 25, 0.7);
+    }
+
+    small.hint {
+      color: var(--muted);
+      display: block;
+      margin-top: 6px;
+    }
+
+    .inline {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Checkbox row */
+    .checkbox-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .checkbox-row input[type=checkbox] {
+      width: auto;
+      flex-shrink: 0;
+      margin: 0;
+      accent-color: var(--accent);
+      transform: translateY(1px);
+    }
+
+    .checkbox-row label {
+      margin: 0;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .actions {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    button[type=submit] {
+      background: linear-gradient(90deg, var(--accent), #22c55e);
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .06s ease, filter .2s ease;
+    }
+
+    button[type=submit]:active {
+      transform: translateY(1px);
+    }
+
+    button[type=submit]:hover {
+      filter: brightness(1.05);
+    }
+
+    footer {
+      color: var(--muted);
+      margin-top: 16px;
+      font-size: 12px;
+    }
+
+    /* CTA button */
+    .cta {
+      background: linear-gradient(90deg, var(--accent), #128a0e);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 999px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .06s ease, filter .2s ease;
+    }
+
+    .cta:hover {
+      filter: brightness(1.05);
+    }
+
+    .cta:active {
+      transform: translateY(1px);
+    }
+
+    /* Modal overlay */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .25s ease, visibility .25s ease;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 960px;
+      max-height: 90vh;
+      overflow-y: auto;
+      margin: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 16px;
+      transform: translateY(20px);
+      transition: transform .25s ease;
+    }
+
+    .modal-overlay.open .modal {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .btn-close {
+      background: none;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: var(--text);
+      font-size: 20px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .15s;
+    }
+
+    .btn-close:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* T&C modal body */
+    .tc-body {
+      padding: 0 4px;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .tc-body h3 {
+      color: var(--accent);
+      margin: 24px 0 8px;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .tc-body h4 {
+      margin: 20px 0 6px;
+      font-size: 15px;
+    }
+
+    .tc-body p {
+      margin: 0 0 10px;
+    }
+
+    .tc-body ul {
+      margin: 0 0 10px;
+      padding-left: 22px;
+    }
+
+    .tc-body li {
+      margin-bottom: 6px;
+    }
+
+    .tc-body .intro {
+      font-style: italic;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .tc-link {
+      color: var(--accent);
+      cursor: pointer;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      font: inherit;
+      padding: 0;
+    }
+
+    @media (max-width: 768px) {
+      .col-6 {
+        grid-column: span 12;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <header>
+      <h1>Affiliate Program</h1>
+      <p class="lead">Join our affiliate program and start earning today. Click below to create your account.</p>
+      <button class="cta" id="open-signup" type="button">Sign Up</button>
+    </header>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="signup-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal">
+        <!-- The form card re-uses the existing form styles -->
+        <form id="affiliate-signup" method="post" autocomplete="on">
+          <div class="modal-header">
+            <h2 id="modal-title">Sign up</h2>
+            <button type="button" class="btn-close" id="close-signup" aria-label="Close">&times;</button>
+          </div>
+          <fieldset class="grid">
+            <div class="col-6">
+              <label for="firstName">First name <span class="req" aria-hidden="true">*</span></label>
+              <input id="firstName" name="first_name" type="text" inputmode="text" autocomplete="given-name" required
+                minlength="2" placeholder="John" />
+              <small class="hint">Valid first name is required.</small>
+            </div>
+            <div class="col-6">
+              <label for="lastName">Last name <span class="req" aria-hidden="true">*</span></label>
+              <input id="lastName" name="last_name" type="text" inputmode="text" autocomplete="family-name" required
+                minlength="2" placeholder="Doe" />
+              <small class="hint">Valid last name is required.</small>
+            </div>
+
+            <div class="col-6">
+              <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
+              <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
+              <small class="hint">Please enter a valid email address.</small>
+            </div>
+            <div class="col-6">
+              <label for="phone">Phone number <span class="req" aria-hidden="true">*</span></label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" required placeholder="+1 555 123 4567"
+                pattern="^\+?[0-9\s().-]{10,}$" />
+              <small class="hint">Your phone number is required.</small>
+            </div>
+
+            <div class="col-6">
+              <label for="username">Username <span class="req" aria-hidden="true">*</span></label>
+              <input id="username" name="username" type="text" autocomplete="username" required minlength="3"
+                placeholder="yourusername" />
+              <small class="hint">Your username is required.</small>
+            </div>
+            <div class="col-6">
+              <label for="password">Password <span class="req" aria-hidden="true">*</span></label>
+              <input id="password" name="password" type="password" autocomplete="new-password" required minlength="8" />
+              <small class="hint">Password is required (min 8 characters).</small>
+            </div>
+
+            <div class="col-6">
+              <label for="skype">Skype</label>
+              <input id="skype" name="skype" type="text" placeholder="Skype ID" />
+              <small class="hint">Please enter a Skype account name.</small>
+            </div>
+            <div class="col-6">
+              <label for="discord">Discord</label>
+              <input id="discord" name="discord" type="text" placeholder="username#1234 or @handle" />
+              <small class="hint">Please enter Discord contact details.</small>
+            </div>
+
+            <div class="col-6">
+              <label for="company">Company</label>
+              <input id="company" name="company" type="text" placeholder="Company LLC" />
+            </div>
+            <div class="col-6">
+              <label for="website">Website</label>
+              <input id="website" name="website" type="url" placeholder="https://example.com" />
+            </div>
+
+            <div class="col-12">
+              <label for="country">Country <span class="req" aria-hidden="true">*</span></label>
+              <select id="country" name="country" required>
+                <option value="" selected disabled>Choose Country</option>
+                <option>Afghanistan</option>
+                <option>Albania</option>
+                <option>Algeria</option>
+                <option>American Samoa</option>
+                <option>Andorra</option>
+                <option>Angola</option>
+                <option>Anguilla</option>
+                <option>Antarctica</option>
+                <option>Antigua and Barbuda</option>
+                <option>Argentina</option>
+                <option>Armenia</option>
+                <option>Aruba</option>
+                <option>Australia</option>
+                <option>Austria</option>
+                <option>Azerbaijan</option>
+                <option>Bahamas</option>
+                <option>Bahrain</option>
+                <option>Bangladesh</option>
+                <option>Barbados</option>
+                <option>Belarus</option>
+                <option>Belgium</option>
+                <option>Belize</option>
+                <option>Benin</option>
+                <option>Bermuda</option>
+                <option>Bhutan</option>
+                <option>Bolivia</option>
+                <option>Bosnia and Herzegovina</option>
+                <option>Botswana</option>
+                <option>Bouvet Island</option>
+                <option>Brazil</option>
+                <option>British Indian Ocean Territory</option>
+                <option>Brunei Darussalam</option>
+                <option>Bulgaria</option>
+                <option>Burkina Faso</option>
+                <option>Burundi</option>
+                <option>Cambodia</option>
+                <option>Cameroon</option>
+                <option>Canada</option>
+                <option>Cape Verde</option>
+                <option>Cayman Islands</option>
+                <option>Central African Republic</option>
+                <option>Chad</option>
+                <option>Chile</option>
+                <option>China</option>
+                <option>Christmas Island</option>
+                <option>Cocos (Keeling) Islands</option>
+                <option>Colombia</option>
+                <option>Comoros</option>
+                <option>Congo</option>
+                <option>Congo, the Democratic Republic of the</option>
+                <option>Cook Islands</option>
+                <option>Costa Rica</option>
+                <option>Cote D'Ivoire</option>
+                <option>Croatia</option>
+                <option>Cuba</option>
+                <option>Cyprus</option>
+                <option>Czech Republic</option>
+                <option>Denmark</option>
+                <option>Djibouti</option>
+                <option>Dominica</option>
+                <option>Dominican Republic</option>
+                <option>Ecuador</option>
+                <option>Egypt</option>
+                <option>El Salvador</option>
+                <option>Equatorial Guinea</option>
+                <option>Eritrea</option>
+                <option>Estonia</option>
+                <option>Ethiopia</option>
+                <option>Falkland Islands (Malvinas)</option>
+                <option>Faroe Islands</option>
+                <option>Fiji</option>
+                <option>Finland</option>
+                <option>France</option>
+                <option>French Guiana</option>
+                <option>French Polynesia</option>
+                <option>French Southern Territories</option>
+                <option>Gabon</option>
+                <option>Gambia</option>
+                <option>Georgia</option>
+                <option>Germany</option>
+                <option>Ghana</option>
+                <option>Gibraltar</option>
+                <option>Greece</option>
+                <option>Greenland</option>
+                <option>Grenada</option>
+                <option>Guadeloupe</option>
+                <option>Guam</option>
+                <option>Guatemala</option>
+                <option>Guinea</option>
+                <option>Guinea-Bissau</option>
+                <option>Guyana</option>
+                <option>Haiti</option>
+                <option>Heard Island and Mcdonald Islands</option>
+                <option>Holy See (Vatican City State)</option>
+                <option>Honduras</option>
+                <option>Hong Kong</option>
+                <option>Hungary</option>
+                <option>Iceland</option>
+                <option>India</option>
+                <option>Indonesia</option>
+                <option>Iran, Islamic Republic of</option>
+                <option>Iraq</option>
+                <option>Ireland</option>
+                <option>Israel</option>
+                <option>Italy</option>
+                <option>Jamaica</option>
+                <option>Japan</option>
+                <option>Jordan</option>
+                <option>Kazakhstan</option>
+                <option>Kenya</option>
+                <option>Kiribati</option>
+                <option>Korea, Democratic People's Republic of</option>
+                <option>Korea, Republic of</option>
+                <option>Kuwait</option>
+                <option>Kyrgyzstan</option>
+                <option>Lao People's Democratic Republic</option>
+                <option>Latvia</option>
+                <option>Lebanon</option>
+                <option>Lesotho</option>
+                <option>Liberia</option>
+                <option>Libyan Arab Jamahiriya</option>
+                <option>Liechtenstein</option>
+                <option>Lithuania</option>
+                <option>Luxembourg</option>
+                <option>Macao</option>
+                <option>Macedonia, the Former Yugoslav Republic of</option>
+                <option>Madagascar</option>
+                <option>Malawi</option>
+                <option>Malaysia</option>
+                <option>Maldives</option>
+                <option>Mali</option>
+                <option>Malta</option>
+                <option>Marshall Islands</option>
+                <option>Martinique</option>
+                <option>Mauritania</option>
+                <option>Mauritius</option>
+                <option>Mayotte</option>
+                <option>Mexico</option>
+                <option>Micronesia, Federated States of</option>
+                <option>Moldova, Republic of</option>
+                <option>Monaco</option>
+                <option>Mongolia</option>
+                <option>Montenegro</option>
+                <option>Montserrat</option>
+                <option>Morocco</option>
+                <option>Mozambique</option>
+                <option>Myanmar</option>
+                <option>Namibia</option>
+                <option>Nauru</option>
+                <option>Nepal</option>
+                <option>Netherlands</option>
+                <option>Netherlands Antilles</option>
+                <option>New Caledonia</option>
+                <option>New Zealand</option>
+                <option>Nicaragua</option>
+                <option>Niger</option>
+                <option>Nigeria</option>
+                <option>Niue</option>
+                <option>Norfolk Island</option>
+                <option>Northern Mariana Islands</option>
+                <option>Norway</option>
+                <option>Oman</option>
+                <option>Pakistan</option>
+                <option>Palau</option>
+                <option>Palestinian Territory, Occupied</option>
+                <option>Panama</option>
+                <option>Papua New Guinea</option>
+                <option>Paraguay</option>
+                <option>Peru</option>
+                <option>Philippines</option>
+                <option>Pitcairn</option>
+                <option>Poland</option>
+                <option>Portugal</option>
+                <option>Puerto Rico</option>
+                <option>Qatar</option>
+                <option>Reunion</option>
+                <option>Romania</option>
+                <option>Russian Federation</option>
+                <option>Rwanda</option>
+                <option>Saint Helena</option>
+                <option>Saint Kitts and Nevis</option>
+                <option>Saint Lucia</option>
+                <option>Saint Pierre and Miquelon</option>
+                <option>Saint Vincent and the Grenadines</option>
+                <option>Samoa</option>
+                <option>San Marino</option>
+                <option>Sao Tome and Principe</option>
+                <option>Saudi Arabia</option>
+                <option>Senegal</option>
+                <option>Serbia</option>
+                <option>Serbia and Montenegro</option>
+                <option>Seychelles</option>
+                <option>Sierra Leone</option>
+                <option>Singapore</option>
+                <option>Slovakia</option>
+                <option>Slovenia</option>
+                <option>Solomon Islands</option>
+                <option>Somalia</option>
+                <option>South Africa</option>
+                <option>South Georgia and the South Sandwich Islands</option>
+                <option>Spain</option>
+                <option>Sri Lanka</option>
+                <option>Sudan</option>
+                <option>Suriname</option>
+                <option>Svalbard and Jan Mayen</option>
+                <option>Swaziland</option>
+                <option>Sweden</option>
+                <option>Switzerland</option>
+                <option>Syrian Arab Republic</option>
+                <option>Taiwan</option>
+                <option>Tajikistan</option>
+                <option>Tanzania, United Republic of</option>
+                <option>Thailand</option>
+                <option>Timor-Leste</option>
+                <option>Togo</option>
+                <option>Tokelau</option>
+                <option>Tonga</option>
+                <option>Trinidad and Tobago</option>
+                <option>Tunisia</option>
+                <option>Turkey</option>
+                <option>Turkmenistan</option>
+                <option>Turks and Caicos Islands</option>
+                <option>Tuvalu</option>
+                <option>Uganda</option>
+                <option>Ukraine</option>
+                <option>United Arab Emirates</option>
+                <option>United Kingdom</option>
+                <option>United States</option>
+                <option>United States Minor Outlying Islands</option>
+                <option>Uruguay</option>
+                <option>Uzbekistan</option>
+                <option>Vanuatu</option>
+                <option>Venezuela</option>
+                <option>Viet Nam</option>
+                <option>Virgin Islands, British</option>
+                <option>Virgin Islands, U.S.</option>
+                <option>Wallis and Futuna</option>
+                <option>Western Sahara</option>
+                <option>Yemen</option>
+                <option>Zambia</option>
+                <option>Zimbabwe</option>
+              </select>
+              <small class="hint">Please select a country from the list.</small>
+            </div>
+
+            <div class="col-12">
+              <label for="additional">Additional info</label>
+              <textarea id="additional" name="additional_info" rows="4"
+                placeholder="Anything else we should know?"></textarea>
+            </div>
+
+            <div class="col-12 checkbox-row" style="margin-top:4px">
+              <input id="agree" name="agree" type="checkbox" required />
+              <label for="agree">I agree with the <button type="button" class="tc-link" id="open-tc">Terms &amp;
+                  Conditions</button> <span class="req" aria-hidden="true">*</span></label>
+            </div>
+
+            <div class="col-12 actions">
+              <button type="submit">Register</button>
+              <!--span aria-live="polite" class="hint">We will contact you shortly.</span-->
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+
+    <!-- Terms & Conditions Modal -->
+    <div class="modal-overlay" id="tc-modal" role="dialog" aria-modal="true" aria-labelledby="tc-modal-title">
+      <div class="modal">
+        <div
+          style="background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.25);padding:24px;backdrop-filter:blur(8px)">
+          <div class="modal-header">
+            <h2 id="tc-modal-title">Terms &amp; Conditions</h2>
+            <button type="button" class="btn-close" id="close-tc" aria-label="Close">&times;</button>
+          </div>
+          <div class="tc-body">
+            <p class="intro">These Terms &amp; Conditions (the &ldquo;Agreement&rdquo;) govern the relationship between
+              NiceBet Partners (the &ldquo;Company&rdquo;) and any individual or entity applying to participate as an
+              Affiliate. By registering, you accept and agree to these Terms in full.</p>
+
+            <h3>General Affiliate Terms &amp; Conditions</h3>
+
+            <h4>1. Definitions</h4>
+            <ul>
+              <li><strong>Affiliate</strong> &ndash; Any person, business, or entity providing promotional services
+                under this Agreement.</li>
+              <li><strong>Affiliate ID</strong> &ndash; A unique identifier assigned in the Company&rsquo;s tracking
+                system.</li>
+              <li><strong>Affiliate Services</strong> &ndash; Marketing, promotion, and advertising activities performed
+                by the Affiliate.</li>
+              <li><strong>Commission</strong> &ndash; Payments due to the Affiliate under Revenue Share, CPA, or Hybrid
+                models.</li>
+              <li><strong>CPA Payment</strong> &ndash; One-time fixed payment for each referred Player meeting
+                qualifying conditions.</li>
+              <li><strong>Net Revenue</strong> &ndash; Total wagers by referred Players less winnings, bonuses,
+                chargebacks, refunds, void bets, fraudulent activity, and operational costs (including taxes, payment
+                fees, and licensing).</li>
+              <li><strong>Player</strong> &ndash; A new customer referred via an Affiliate&rsquo;s tracking link who
+                registers and makes a qualifying deposit (excluding self-referrals and existing customers).</li>
+              <li><strong>Promotional Rights</strong> &ndash; License to market Company brands under these Terms.</li>
+              <li><strong>Negative Balance</strong> &ndash; When deductions exceed revenue, resulting in a negative
+                commission balance.</li>
+              <li><strong>Revenue Share</strong> &ndash; Commission model based on a percentage of Net Revenue.</li>
+              <li><strong>Sub-Affiliate</strong> &ndash; An Affiliate referred by another Affiliate, subject to written
+                approval.</li>
+              <li><strong>Prohibited Traffic</strong> &ndash; Any unapproved method including spam, fraud, incentivized
+                sign-ups, or promotion in restricted territories.</li>
+              <li><strong>Attribution (Last-Click Policy)</strong> &ndash; Player credit assigned to the Affiliate whose
+                tracking link was last clicked prior to registration.</li>
+            </ul>
+
+            <h4>2. Affiliate Obligations</h4>
+            <ul>
+              <li>Promote Company brands responsibly and in compliance with applicable laws and regulations.</li>
+              <li>Use only Company-approved creative materials and ensure tracking links function properly.</li>
+              <li>Bear all marketing costs and maintain accurate, up-to-date contact and payment details.</li>
+              <li>Display mandatory disclaimers such as &ldquo;18+ ONLY&rdquo; and &ldquo;Terms &amp; Conditions
+                Apply.&rdquo;</li>
+              <li>Update or remove offers within five (5) business days of Company notification.</li>
+            </ul>
+
+            <h4>3. Affiliate Prohibitions</h4>
+            <ul>
+              <li>Promoting to individuals under 18 or in restricted territories.</li>
+              <li>Engaging in fraud, spam, self-referrals, or incentivized traffic.</li>
+              <li>Affiliates may have a Player account for payouts but not for self-referrals or employee sign-ups.</li>
+              <li>Using misleading or coercive advertising.</li>
+              <li>Employing intrusive tools (forced pop-ups, spyware, or deceptive redirects).</li>
+              <li>Infringing any Company intellectual property or brand rights.</li>
+            </ul>
+
+            <h4>4. Company Obligations</h4>
+            <ul>
+              <li>Provide tracking links, promotional materials, and affiliate support.</li>
+              <li>Maintain reasonable uptime and data accuracy.</li>
+              <li>Investigate fraud and may withhold payments during investigations.</li>
+              <li>Pay commissions in accordance with these Terms and compliance requirements.</li>
+            </ul>
+
+            <h4>5. Commission Models</h4>
+            <ul>
+              <li><strong>Revenue Share:</strong> Percentage of Net Revenue earned from referred Players.</li>
+              <li><strong>CPA (Cost Per Acquisition):</strong> One-off fixed payment per qualified Player. CPA
+                commissions are paid only if the player makes a minimum deposit of 100&nbsp;LRD.</li>
+              <li><strong>Hybrid:</strong> Combination of Revenue Share and CPA, as agreed in writing.</li>
+            </ul>
+
+            <h4>6. Negative Balance &amp; Carryover</h4>
+            <p>Negative balances will carry forward to subsequent months until offset by Positive Earnings.</p>
+
+            <h4>7. Commission Payment</h4>
+            <ul>
+              <li>Calculated monthly and paid within 30 days of month-end.</li>
+              <li>Minimum payout threshold: 100&nbsp;USD or equivalent local currency.</li>
+              <li>Affiliates must provide valid payment or e-wallet details.</li>
+              <li><strong>Compliance Hold:</strong> Payments may be delayed pending KYC/AML or regulatory checks.</li>
+            </ul>
+
+            <h4>8. Tracking &amp; Attribution</h4>
+            <ul>
+              <li>Tracking is cookie-based (minimum 30-day duration).</li>
+              <li>Last-click attribution applies.</li>
+              <li>The Company is not responsible for Players not tracked due to third-party interference, ad blockers,
+                or technical issues.</li>
+            </ul>
+
+            <h4>9. Sub-Affiliates</h4>
+            <ul>
+              <li>Sub-Affiliates require prior written approval.</li>
+              <li>Parent Affiliates may earn up to a 5% override commission.</li>
+              <li>Affiliates are responsible for their Sub-Affiliates&rsquo; compliance.</li>
+            </ul>
+
+            <h4>10. Responsible Gambling</h4>
+            <ul>
+              <li>Promote gambling responsibly.</li>
+              <li>Include responsible gambling disclaimers in all creatives.</li>
+              <li>Avoid targeting underage or vulnerable persons.</li>
+            </ul>
+
+            <h4>11. Termination</h4>
+            <ul>
+              <li>Either Party may terminate this Agreement with 15 days&rsquo; notice.</li>
+              <li>Immediate termination applies for fraud, breach, or non-compliance.</li>
+              <li>Upon termination, Affiliates must remove all promotional materials within 48 hours.</li>
+            </ul>
+
+            <h4>12. Governing Law</h4>
+            <p>These General Terms are governed by the laws of the Republic of Liberia (for local operations) or
+              Mauritius (for international operations), depending on jurisdictional scope.</p>
+
+            <h3>Additional Terms for Local Affiliate (Africa-Regulated Jurisdictions)</h3>
+            <ul>
+              <li>Local affiliates are required to comply with all applicable gaming, advertising, and tax laws within
+                their operating jurisdictions.</li>
+              <li>They may promote Company brands only to residents located in approved African countries.</li>
+              <li>Commissions payable to local affiliates shall be made in Liberian Dollars (LRD) or other approved
+                local currencies.</li>
+              <li>All commission payments are subject to applicable local tax withholding requirements.</li>
+              <li>These Local Affiliate Terms are governed by the laws of the Republic of Liberia, and any disputes
+                shall fall under its exclusive jurisdiction.</li>
+            </ul>
+
+            <h3>Additional Terms for International Affiliate (Outside Africa)</h3>
+            <ul>
+              <li>International affiliates must obtain written approval from the Company before commencing any marketing
+                or promotional activity.</li>
+              <li>Activation of an account is subject to the completion of full KYC and AML verification, including
+                valid identification, proof of address, tax documentation, and disclosure of traffic sources.</li>
+              <li>Affiliates are strictly prohibited from using undeclared brokers or any incentivized or misleading
+                promotional methods.</li>
+              <li>A minimum conversion rate of 30% from registrations to first-time depositors is required; consistent
+                underperformance may result in review or suspension.</li>
+              <li>A minimum of 300 registrations is required monthly; consistent underperformance may result in review
+                or suspension.</li>
+              <li>Commission structures may include Revenue Share, CPA, or Hybrid models, and the Company reserves the
+                right to apply holdbacks of up to 60 days for verification or compliance purposes.</li>
+              <li>All approved commission payments shall be made in USD or EUR following verification and approval by
+                the Company.</li>
+              <li>The Company continuously monitors traffic quality and compliance, and affiliates must provide campaign
+                data or advertising placements upon request.</li>
+              <li>Any instance of fraudulent, low-quality, or non-compliant traffic may lead to immediate termination of
+                the affiliate account and forfeiture of unpaid commissions.</li>
+              <li>These International Affiliate Terms are governed by the laws of the Republic of Mauritius, and all
+                disputes shall fall under the exclusive jurisdiction of the courts of Mauritius.</li>
+            </ul>
+          </div>
+          <div style="text-align:center;margin-top:24px">
+            <button type="button" class="cta" id="ok-tc" style="font-size:16px;padding:10px 40px">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>&copy; 2020 Aff@SM &bull; Privacy &bull; Terms &bull; Support</footer>
+  </main>
+
+  <script>
+    // Generic modal helpers
+    function openModal(el) { el.classList.add('open'); }
+    function closeModal(el) { el.classList.remove('open'); }
+
+    // Sign-up modal
+    const signupOverlay = document.getElementById('signup-modal');
+    document.getElementById('open-signup').addEventListener('click', function () { openModal(signupOverlay); });
+    document.getElementById('close-signup').addEventListener('click', function () { closeModal(signupOverlay); });
+    signupOverlay.addEventListener('click', function (e) { if (e.target === signupOverlay) closeModal(signupOverlay); });
+
+    // T&C modal
+    const tcOverlay = document.getElementById('tc-modal');
+    document.getElementById('open-tc').addEventListener('click', function () { openModal(tcOverlay); });
+    document.getElementById('close-tc').addEventListener('click', function () { closeModal(tcOverlay); });
+    document.getElementById('ok-tc').addEventListener('click', function () { closeModal(tcOverlay); });
+    tcOverlay.addEventListener('click', function (e) { if (e.target === tcOverlay) closeModal(tcOverlay); });
+
+    // Escape closes whichever modal is open
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        closeModal(signupOverlay);
+        closeModal(tcOverlay);
+      }
+    });
+
+    document.getElementById('affiliate-signup').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      let username = document.getElementById('username').value;
+      let bo_user_email = document.getElementById('email').value;
+      let first_name = document.getElementById('firstName').value;
+      let last_name = document.getElementById('lastName').value;
+      let phone_number = document.getElementById('phone').value;
+      let password = document.getElementById('password').value;
+      let skype = document.getElementById('skype').value;
+      let discord = document.getElementById('discord').value;
+      let company = document.getElementById('company').value;
+      let web_site_url = document.getElementById('website').value;
+      let countrySelect = document.getElementById('country');
+      let country = countrySelect.options[countrySelect.selectedIndex].text;
+      let comments = document.getElementById('additional').value;
+      let tc = document.getElementById('agree').checked;
+      let language = "EN";
+
+      console.log('Country:', country);
+      let data = {
+        "id": 1,
+        "hostname": "aff.nicebetpartners.com",
+        "first_name": first_name,
+        "last_name": last_name,
+        "bo_user_email": bo_user_email,
+        "phone_number": phone_number,
+        "username": username,
+        "password": password,
+        "skype": skype,
+        "company": company,
+        "web_site_url": web_site_url,
+        "country": country,
+        "comments": comments,
+        "language": language,
+        "tc": true,
+        "token": "0cAFcWeA5IED0JOJpD-d9XMrlTOVuNm8Yi-pVNfV8ZRK1ZCNZsmPYzN_DFC5xxLQ00l_D5Nlp-UBUWlG8VqaUIX7NksL_9i2J4WMzNaOIsJYYUjnU_gADaJ4giVqMc-kU4YtIq0bNimFmDILUQerwXQ7AFhDRn1RaAHfqBmmzgcCkcW1hDZ1Fd1LNtfW0gecEXm8QnoRLy1BvjTQuJys-ds6WDvD4eZfYcnkrZgYQ9M-N1gk7os29_qI6UoOTVSdDP8A4nG7dWrhraWZ1ZUSImgYe9KJxXKoGGU6um20iRdlbBO-yZiAuyAv__Kmd-8pwg8QvPoZym5wl602Ffer2j9oAX3GZ-yXH569ea6jqVrjApWhkjGCLTfvIvRzXfD_Mnb5awkEDgfM0aTni9I_Op-_O6MfT93fMkiK9_SgiRazCiJhbrZHyVNu82Dhq1OghprT9iDJRuxFZNijqaIsoE-IJDj9VJwe1qbwxwKqT7gJshZnPafUlbVudVqeWG7rbA0bil0Jv7iK9Bk8SNSIHko1791bVP3hkmrEZoz8DnQoaFtgJA47Fsu018FJpvICHT3mAx2u9me1fsqUum0mYjkKX7o4pEA1itrMoo0QTWqdUdPBA_D_l5DQVrjfg3sRLiP03Uy7VjQox5_4E6r04K3FjBbTtnOylUnjc8KEPjMnofKkDP6NDAekenU4M7hf9T_87aBXgLR4wS-ZcElfqwoNpxqFIwDcxkpEbK5r7cavATcwzpsleCt38mnZ1gHLoLh47TWqfRJFlZta1aMTmtt5PmbHB74LlBuA"
+      }
+
+      fetch('http://localhost:3000/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(result => {
+        console.log('Registration response:', result);
+        alert('Registration submitted successfully!');
+      })
+      .catch(err => {
+        console.error('Registration error:', err);
+        alert('Something went wrong. Please try again.');
+      });
+    });
+
+
+  </script>
+</body>
+
+</html>
