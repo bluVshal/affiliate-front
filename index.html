@@ -7,13 +7,17 @@
   <title>Affiliate Sign Up</title>
   <style>
     :root {
-      --bg: #254e36;
+      --bg: #561185;
       --panel: #111827;
       --text: #e5e7eb;
       --muted: #9ca3af;
       --accent: #3b82f6;
       --error: #ef4444;
       --ok: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     html,
@@ -30,22 +34,40 @@
       color: var(--text);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
     }
 
     .container {
-      padding: 3rem;
+      padding: clamp(1rem, 5vw, 3rem);
+      max-width: 100%;
     }
 
     .choice-container {
       display: none;
-      width: 11rem;
-      margin-bottom: 1.5rem;
-      padding: 1.5rem;
+      width: 100%;
+      max-width: 11rem;
+      margin: 0 auto 1.5rem;
+      padding: 1rem;
+    }
+
+    .brand-container {
+      background-color: #5718eb6b;
+      border-color: transparent;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 28rem;
+      margin: 0 auto;
+      padding: clamp(1.2rem, 4vw, 1.5rem);
+      border-radius: 20px;
     }
 
     .brand-img {
-      width: 15rem;
-      padding: 1.5rem;
+      width: 100%;
+      max-width: 15rem;
+      height: auto;
+      padding: clamp(1rem, 3vw, 1.5rem);
     }
 
     header {
@@ -53,13 +75,17 @@
     }
 
     h1 {
-      font-size: 28px;
+      font-size: clamp(1.5rem, 5vw, 1.75rem);
       margin: 0 0 8px;
+      text-align: center;
     }
 
     p.lead {
       color: var(--muted);
       margin: 0 0 24px;
+      font-size: clamp(0.875rem, 3vw, 1rem);
+      text-align: center;
+      line-height: 1.6;
     }
 
     form {
@@ -67,7 +93,7 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 16px;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
-      padding: 24px;
+      padding: clamp(1rem, 4vw, 1.5rem);
       backdrop-filter: blur(8px);
     }
 
@@ -80,7 +106,7 @@
     .grid {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
-      gap: 16px;
+      gap: clamp(0.75rem, 2vw, 1rem);
     }
 
     .col-6 {
@@ -95,6 +121,7 @@
       display: inline-block;
       margin-bottom: 6px;
       font-weight: 600;
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
     }
 
     .req {
@@ -106,14 +133,14 @@
     select,
     textarea {
       width: 100%;
-      box-sizing: border-box;
-      padding: 12px 14px;
+      padding: clamp(0.625rem, 2vw, 0.75rem) clamp(0.75rem, 2.5vw, 0.875rem);
       border-radius: 10px;
       border: 1px solid rgba(255, 255, 255, 0.16);
       background: rgba(10, 15, 25, 0.55);
       color: var(--text);
       outline: none;
       transition: border-color .2s, box-shadow .2s, background .2s;
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
     }
 
     input::placeholder,
@@ -133,18 +160,20 @@
       color: var(--muted);
       display: block;
       margin-top: 6px;
+      font-size: clamp(0.75rem, 2vw, 0.875rem);
     }
 
     .inline {
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-wrap: wrap;
     }
 
     /* Checkbox row */
     .checkbox-row {
       display: flex;
-      align-items: baseline;
+      align-items: flex-start;
       gap: 10px;
     }
 
@@ -152,14 +181,15 @@
       width: auto;
       flex-shrink: 0;
       margin: 0;
+      margin-top: 3px;
       accent-color: var(--accent);
-      transform: translateY(1px);
     }
 
     .checkbox-row label {
       margin: 0;
       font-weight: 400;
-      line-height: 1.5;
+      line-height: 1.6;
+      flex: 1;
     }
 
     .actions {
@@ -167,17 +197,20 @@
       display: flex;
       align-items: center;
       gap: 16px;
+      flex-wrap: wrap;
     }
 
     button[type=submit] {
       background: linear-gradient(90deg, var(--accent), #22c55e);
       color: white;
       border: none;
-      padding: 12px 18px;
+      padding: clamp(0.625rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.125rem);
       border-radius: 999px;
       font-weight: 700;
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
       cursor: pointer;
       transition: transform .06s ease, filter .2s ease;
+      min-width: fit-content;
     }
 
     button[type=submit]:active {
@@ -191,7 +224,8 @@
     footer {
       color: var(--muted);
       margin-top: 16px;
-      font-size: 12px;
+      font-size: clamp(0.625rem, 2vw, 0.75rem);
+      text-align: center;
     }
 
     /* CTA button */
@@ -199,12 +233,14 @@
       background: linear-gradient(90deg, var(--accent), #128a0e);
       color: white;
       border: none;
-      padding: 14px 32px;
+      padding: clamp(0.75rem, 3vw, 0.875rem) clamp(1.5rem, 5vw, 2rem);
       border-radius: 999px;
-      font-size: 18px;
+      font-size: clamp(1rem, 3.5vw, 1.125rem);
       font-weight: 700;
       cursor: pointer;
       transition: transform .06s ease, filter .2s ease;
+      width: 100%;
+      max-width: 200px;
     }
 
     .cta:hover {
@@ -228,6 +264,7 @@
       opacity: 0;
       visibility: hidden;
       transition: opacity .25s ease, visibility .25s ease;
+      padding: clamp(0.5rem, 2vw, 1rem);
     }
 
     .modal-overlay.open {
@@ -240,7 +277,6 @@
       max-width: 960px;
       max-height: 90vh;
       overflow-y: auto;
-      margin: 16px;
       border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: 16px;
       transform: translateY(20px);
@@ -256,26 +292,28 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
+      gap: 1rem;
     }
 
     .modal-header h2 {
       margin: 0;
-      font-size: 22px;
+      font-size: clamp(1.125rem, 4vw, 1.375rem);
     }
 
     .btn-close {
       background: none;
       border: 1px solid rgba(255, 255, 255, 0.16);
       color: var(--text);
-      font-size: 20px;
-      width: 36px;
-      height: 36px;
+      font-size: clamp(1.125rem, 4vw, 1.25rem);
+      width: clamp(2rem, 6vw, 2.25rem);
+      height: clamp(2rem, 6vw, 2.25rem);
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: background .15s;
+      flex-shrink: 0;
     }
 
     .btn-close:hover {
@@ -284,22 +322,22 @@
 
     /* T&C modal body */
     .tc-body {
-      padding: 0 4px;
+      padding: 0 clamp(0.25rem, 1vw, 0.5rem);
       line-height: 1.7;
-      font-size: 14px;
+      font-size: clamp(0.813rem, 2.5vw, 0.875rem);
     }
 
     .tc-body h3 {
       color: var(--accent);
       margin: 24px 0 8px;
-      font-size: 16px;
+      font-size: clamp(0.938rem, 3vw, 1rem);
       text-transform: uppercase;
       letter-spacing: .5px;
     }
 
     .tc-body h4 {
       margin: 20px 0 6px;
-      font-size: 15px;
+      font-size: clamp(0.875rem, 2.8vw, 0.938rem);
     }
 
     .tc-body p {
@@ -331,14 +369,89 @@
       padding: 0;
     }
 
+    .tc-link:hover {
+      text-decoration: none;
+    }
+
+    /* Media queries for specific adjustments */
     @media (max-width: 768px) {
       .col-6 {
         grid-column: span 12;
       }
+    }
 
-      .cta {
-        font-size: 16px;
-        padding: 12px 28px;
+    @media (max-width: 640px) {
+      body {
+        font-size: 14px;
+      }
+
+      .modal {
+        max-height: 95vh;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .brand-container {
+        padding: 1rem;
+      }
+
+      .grid {
+        gap: 0.75rem;
+      }
+
+      form {
+        padding: 1rem;
+      }
+    }
+
+    /* Improve scrollbar for modal on all platforms */
+    .modal::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .modal::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+
+    .modal::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    .modal::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Ensure select dropdown works well on mobile */
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e5e7eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 1em;
+      padding-right: 2.5rem;
+    }
+
+    /* Touch-friendly tap targets */
+    @media (hover: none) and (pointer: coarse) {
+      button,
+      input,
+      select,
+      textarea,
+      .tc-link {
+        min-height: 44px;
+      }
+
+      .checkbox-row input[type=checkbox] {
+        min-width: 20px;
+        min-height: 20px;
       }
     }
   </style>
@@ -348,21 +461,22 @@
 <body>
   <main class="container" id="reg-container">
     <header>
-      <div class="brand-container"></div>
-      <h1>Affiliate Program</h1>
-      <div class="choice-container" id="choice-container">
-        <label class="choice-lead" id="choice-lead" for="cars">Choose a brand:</label>
-        <select name="brandSelect" id="brandSelect" onchange="getOptionValue()">
-          <option value="8bet">8Bet</option>
-          <option value="nicebetlb">NiceBet Liberia</option>
-          <option value="nicebetmz">NiceBet Mozambique</option>
-        </select>
-      </div>      
-      <div><img class="brand-img" id="brand-img" src="" /></div>
+      <div class="brand-container">
+        <h1>Affiliate Program</h1>
+        <div class="choice-container" id="choice-container">
+          <label class="choice-lead" id="choice-lead" for="brandSelect">Choose a brand:</label>
+          <select name="brandSelect" id="brandSelect" onchange="getOptionValue()">
+            <option value="8bet">8Bet</option>
+            <option value="nicebetlb">NiceBet Liberia</option>
+            <option value="nicebetmz">NiceBet Mozambique</option>
+          </select>
+        </div>
+        <div><img class="brand-img" id="brand-img" src="" alt="Brand Logo" /></div>
 
-      <p class="lead" id="lead">Join our affiliate program and start earning today. Click on the button to create your
-        account.</p>
-      <button class="cta" id="open-signup" type="button">Sign Up</button>
+        <p class="lead" id="lead">Join our affiliate program and start earning today. Click on the button to create your
+          account.</p>
+        <button class="cta" id="open-signup" type="button">Sign Up</button>
+      </div>
     </header>
 
     <!-- Modal -->
@@ -684,7 +798,6 @@
 
             <div class="col-12 actions">
               <button type="submit">Register</button>
-              <!--span aria-live="polite" class="hint">We will contact you shortly.</span-->
             </div>
           </fieldset>
         </form>
@@ -695,7 +808,7 @@
     <div class="modal-overlay" id="tc-modal" role="dialog" aria-modal="true" aria-labelledby="tc-modal-title">
       <div class="modal">
         <div
-          style="background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.25);padding:24px;backdrop-filter:blur(8px)">
+          style="background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.25);padding:clamp(1rem,4vw,1.5rem);backdrop-filter:blur(8px)">
           <div class="modal-header">
             <h2 id="tc-modal-title">Terms &amp; Conditions</h2>
             <button type="button" class="btn-close" id="close-tc" aria-label="Close">&times;</button>
@@ -853,7 +966,7 @@
             </ul>
           </div>
           <div style="text-align:center;margin-top:24px">
-            <button type="button" class="cta" id="ok-tc" style="font-size:16px;padding:10px 40px">OK</button>
+            <button type="button" class="cta" id="ok-tc" style="font-size:clamp(0.875rem,3vw,1rem);padding:clamp(0.625rem,2vw,0.75rem) clamp(1.5rem,5vw,2.5rem)">OK</button>
           </div>
         </div>
       </div>
@@ -905,7 +1018,6 @@
       let tc = document.getElementById('agree').checked;
       let language = "EN";
 
-      console.log('Country:', country);
       let data = {
         "id": 1,
         "hostname": "aff.nicebetpartners.com",
@@ -975,7 +1087,6 @@
 
     function getOptionValue() {
       let selectElement = document.getElementById("brandSelect").value;
-      console.log(selectElement);
 
       if (selectElement === '8bet') {
         document.getElementById("brand-img").src = "8Bet.png";
